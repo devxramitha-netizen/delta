@@ -69,6 +69,11 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           read-only-cache: ${{ github.event_name == 'pull_request' }}
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
       - name: Build app
         run: ./gradlew assembleDebugKeySignedRelease
       - name: Perform CodeQL Analysis
